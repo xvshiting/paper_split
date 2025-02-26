@@ -172,4 +172,6 @@ cleanup_thread = threading.Thread(target=file_cleanup_task, daemon=True)
 cleanup_thread.start()
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5001) 
+    from werkzeug.serving import run_simple
+    run_simple('0.0.0.0', 8666, app, use_reloader=True, use_debugger=True, threaded=True, request_timeout=300)  # 增加请求超时时间为300秒
+    # app.run(debug=True, host='0.0.0.0', port=5001)  # 注释或删除这行 
