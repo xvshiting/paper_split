@@ -4,7 +4,7 @@ import shutil
 import zipfile
 import threading
 import time
-from flask import Flask, render_template, request, redirect, url_for, send_file, session
+from flask import Flask, render_template, request, redirect, url_for, send_file, session, jsonify
 from werkzeug.utils import secure_filename
 from pdf_process import split_pdf_by_students
 
@@ -79,6 +79,11 @@ def upload_file():
     session['task_id'] = task_id
     session['zip_path'] = zip_path
     
+    # 如果是AJAX请求，返回JSON响应
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({'success': True, 'redirect': url_for('result', task_id=task_id)})
+    
+    # 常规表单提交，重定向到结果页面
     return redirect(url_for('result', task_id=task_id))
 
 @app.route('/result/<task_id>')

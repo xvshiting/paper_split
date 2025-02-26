@@ -78,7 +78,15 @@
                 <p class="note">注意: Excel表格必须包含"学号"、"姓名"和"页数"三列（页数不填，默认为2页； 学号与pdf顺序对应）</p>
             </div>
             
-            <button type="submit" class="submit-btn">开始拆分</button>
+            <!-- 添加上传进度显示区域 -->
+            <div class="upload-progress" id="upload-progress" style="display: none;">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <p id="progress-text">上传进度: 0%</p>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submit-btn">开始拆分</button>
         </form>
         
         <div class="divider"></div>
@@ -162,5 +170,84 @@
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const submitBtn = document.getElementById('submit-btn');
+        const progressContainer = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
+
+        form.addEventListener('submit', function(e) {
+            // 阻止表单默认提交行为
+            e.preventDefault();
+            
+            // 获取表单数据
+            const formData = new FormData(form);
+            
+            // 检查文件是否已选择
+            const pdfFile = document.getElementById('pdf_file').files[0];
+            const excelFile = document.getElementById('excel_file').files[0];
+            
+            if (!pdfFile || !excelFile) {
+                alert('请选择PDF文件和Excel文件！');
+                return;
+            }
+            
+            // 显示进度条，隐藏提交按钮
+            progressContainer.style.display = 'block';
+            submitBtn.style.display = 'none';
+            
+            // 创建AJAX请求
+            const xhr = new XMLHttpRequest();
+            
+            // 监听上传进度
+            xhr.upload.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percentComplete + '%';
+                    progressText.textContent = `上传进度: ${percentComplete}%`;
+                }
+            });
+            
+            // 请求完成后的处理
+            xhr.addEventListener('load', function() {
+                if (xhr.status === 200) {
+                    // 如果服务器返回JSON响应
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    } catch (e) {
+                        // 如果服务器返回HTML响应，则直接替换当前页面
+                        document.open();
+                        document.write(xhr.responseText);
+                        document.close();
+                    }
+                } else {
+                    // 处理错误
+                    progressText.textContent = '上传失败，请重试！';
+                    progressBar.style.backgroundColor = '#e74c3c';
+                    submitBtn.style.display = 'block';
+                }
+            });
+            
+            // 请求错误的处理
+            xhr.addEventListener('error', function() {
+                progressText.textContent = '网络错误，请检查连接！';
+                progressBar.style.backgroundColor = '#e74c3c';
+                submitBtn.style.display = 'block';
+            });
+            
+            // 打开请求
+            xhr.open('POST', form.action, true);
+            
+            // 发送表单数据
+            xhr.send(formData);
+        });
+    });
+    </script>
 </body>
 </html> 
