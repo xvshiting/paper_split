@@ -1,0 +1,5 @@
+output/*
+upload/*
+outputs/*   
+uploads/*
+__pycache__/*
