@@ -5,10 +5,56 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .guide-section {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .guide-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        
+        .guide-step {
+            margin-bottom: 15px;
+        }
+        
+        .guide-step h3 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+        
+        .important-note {
+            background-color: #ffe8cc;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 15px 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        ul.guide-list {
+            padding-left: 20px;
+        }
+        
+        ul.guide-list li {
+            margin-bottom: 8px;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #eee;
+            margin: 30px 0;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>PDF文件拆分工具</h1>
+        <h1>PDF试卷拆分工具</h1>
         <p>上传整个班级的PDF文件和包含学生信息的Excel表格，系统将按照学生信息拆分PDF文件</p>
         
         {% if error %}
@@ -34,6 +80,87 @@
             
             <button type="submit" class="submit-btn">开始拆分</button>
         </form>
+        
+        <div class="divider"></div>
+        
+        <!-- 使用指南部分 -->
+        <div class="guide-section">
+            <h2>PDF试卷拆分工具使用指南</h2>
+            
+            <div class="guide-step">
+                <h3>第一步：准备PDF文件</h3>
+                <ul class="guide-list">
+                    <li>使用扫描王APP进行试卷扫描</li>
+                    <li>按照<strong>学生顺序</strong>依次扫描所有试卷</li>
+                    <li>确保每位学生的试卷页面连续排列</li>
+                    <li>将所有扫描内容合并为一个PDF文件</li>
+                    <li>将PDF文件保存到您的设备中</li>
+                </ul>
+            </div>
+            
+            <div class="guide-step">
+                <h3>第二步：准备Excel表格</h3>
+                <p>创建一个Excel表格，必须包含以下列：</p>
+                <ul class="guide-list">
+                    <li><strong>学号</strong>：学生的学号</li>
+                    <li><strong>姓名</strong>：学生的姓名</li>
+                    <li><strong>页数</strong>：每个学生试卷的页数（不填默认为2页）</li>
+                </ul>
+                
+                <div class="important-note">
+                    <p><strong>重要提示</strong>：</p>
+                    <ul>
+                        <li>Excel中学生信息的排列顺序必须与PDF文件中的试卷顺序<strong>完全一致</strong></li>
+                        <li>页数列不填写时，系统默认每位学生为2页试卷</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <h3>第三步：上传文件</h3>
+                <ol class="guide-list">
+                    <li>在上方表单中点击"选择PDF文件"按钮，上传您准备好的试卷PDF文件</li>
+                    <li>点击"选择Excel表格"按钮，上传您准备好的学生信息表格</li>
+                    <li>点击"开始拆分"按钮</li>
+                </ol>
+            </div>
+            
+            <div class="guide-step">
+                <h3>第四步：下载结果</h3>
+                <ol class="guide-list">
+                    <li>系统处理完成后，将显示成功页面</li>
+                    <li>点击"下载拆分后的文件"按钮获取ZIP压缩包</li>
+                    <li>ZIP文件中包含按照学号和姓名命名的单独PDF文件</li>
+                </ol>
+                <div class="important-note">
+                    <p><strong>注意</strong>：下载后文件将从服务器删除，请妥善保存您的下载文件！</p>
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <h3>注意事项</h3>
+                <ul class="guide-list">
+                    <li>文件格式要求：
+                        <ul>
+                            <li>PDF文件必须是有效的PDF格式</li>
+                            <li>Excel文件必须是.xlsx或.xls格式</li>
+                        </ul>
+                    </li>
+                    <li>文件处理时间：
+                        <ul>
+                            <li>处理时间取决于PDF文件大小和学生人数</li>
+                            <li>大型文件可能需要更长时间处理</li>
+                        </ul>
+                    </li>
+                    <li>文件存储：
+                        <ul>
+                            <li>所有上传和生成的文件将在下载后或30分钟后自动从服务器删除</li>
+                            <li>请确保下载后保存您的文件</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </body>
 </html> 
