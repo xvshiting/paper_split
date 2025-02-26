@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF拆分工具</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>PDF文件拆分工具</h1>
+        <p>上传整个班级的PDF文件和包含学生信息的Excel表格，系统将按照学生信息拆分PDF文件</p>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="pdf_file">选择PDF文件:</label>
+                <input type="file" name="pdf_file" id="pdf_file" accept=".pdf" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="excel_file">选择Excel表格(包含学号、姓名、页数列):</label>
+                <input type="file" name="excel_file" id="excel_file" accept=".xlsx,.xls" required>
+            </div>
+            
+            <div class="form-group">
+                <p class="note">注意: Excel表格必须包含"学号"、"姓名"和"页数"三列（页数不填，默认为2页； 学号与pdf顺序对应）</p>
+            </div>
+            
+            <button type="submit" class="submit-btn">开始拆分</button>
+        </form>
+    </div>
+</body>
+</html> 

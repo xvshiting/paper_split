@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF拆分完成</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>PDF拆分完成</h1>
+        <div class="success-message">
+            <p>您的PDF文件已成功拆分！</p>
+            <p>请点击下面的按钮下载ZIP压缩包。</p>
+            <p class="warning">注意：下载后文件将被删除，请妥善保存！</p>
+        </div>
+        
+        <a href="{{ url_for('download', task_id=task_id) }}" class="download-btn" id="download-btn">下载拆分后的文件</a>
+        
+        <div class="return-link">
+            <a href="{{ url_for('index') }}">返回首页</a>
+        </div>
+        
+        <div class="cleanup-message" id="cleanup-message" style="display:none; margin-top: 15px; text-align: center; color: #666;">
+            文件正在清理中...
+        </div>
+    </div>
+
+    <script>
+    // 在下载链接点击后，显示清理消息并发送清理请求
+    document.getElementById('download-btn').addEventListener('click', function() {
+        // 延迟3秒，确保下载已经开始
+        setTimeout(function() {
+            // 显示清理消息
+            document.getElementById('cleanup-message').style.display = 'block';
+            
+            // 发送清理请求
+            fetch('/cleanup')
+                .then(function() {
+                    // 清理完成后更新消息
+                    document.getElementById('cleanup-message').innerText = '文件已清理完成！';
+                })
+                .catch(function(error) {
+                    console.error('清理失败:', error);
+                });
+        }, 3000);
+    });
+    </script>
+</body>
+</html> 
