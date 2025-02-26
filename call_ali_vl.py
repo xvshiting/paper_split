@@ -10,7 +10,7 @@ def encode_image(image_path):
 
 # 初始化 OpenAI 客户端
 client = OpenAI(
-    api_key="sk-4ec31c24570e46a18b25a3e350a6fc60",  # 从环境变量中获取 API Key
+    api_key="xxxxxx",  # 从环境变量中获取 API Key
     base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 设置基础 URL
 )
 
